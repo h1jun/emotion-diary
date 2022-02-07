@@ -15,7 +15,6 @@ export const DiaryEditor = ({ isEdit, originData }) => {
   const [date, setDate] = useState(getStringDate(new Date()));
   const { onCreate, onEdit } = useContext(DiaryDispatchContext);
   const navigate = useNavigate();
-
   const handleClickEmote = (emotion) => {
     setEmotion(emotion);
   };
