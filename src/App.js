@@ -73,7 +73,7 @@ const dummyData = [
 function App() {
   const [data, dispatch] = useReducer(reducer, dummyData);
 
-  const dataId = useRef(0);
+  const dataId = useRef(6);
   // CREATE
   const onCreate = (date, content, emotion) => {
     dispatch({
@@ -96,11 +96,13 @@ function App() {
   // EDIT
   const onEdit = (targetId, date, content, emotion) => {
     dispatch({
-      type: "Edit",
-      id: targetId,
-      data: new Date(date).getTime(),
-      content,
-      emotion,
+      type: "EDIT",
+      data: {
+        id: targetId,
+        date: new Date(date).getTime(),
+        content,
+        emotion,
+      },
     });
   };
 
@@ -113,6 +115,7 @@ function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/edit" element={<Edit />}></Route>
               <Route path="/new" element={<New />}></Route>
+              <Route path="/edit/:id" element={<Edit />}></Route>
               <Route path="/diary/:id" element={<Diary />}></Route>
             </Routes>
           </div>

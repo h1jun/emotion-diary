@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { DiaryDispatchContext } from "./../App";
 import { MyButton } from "./MyButton";
 import { MyHeader } from "./MyHeader";
@@ -37,12 +37,12 @@ const getStringDate = (date) => {
   return date.toISOString().slice(0, 10);
 };
 
-export const DiaryEditor = () => {
+export const DiaryEditor = ({ isEdit, originData }) => {
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
-  const { onCreate } = useContext(DiaryDispatchContext);
+  const { onCreate, onEdit } = useContext(DiaryDispatchContext);
   const navigate = useNavigate();
 
   const handleClickEmote = (emotion) => {
@@ -55,14 +55,37 @@ export const DiaryEditor = () => {
       contentRef.current.focus();
       return;
     }
-    onCreate(date, content, emotion);
+
+    if (
+      window.confirm(
+        isEdit ? "일기를 수정하시겠습니까?" : "새로운 일기를 작성하시겠습니까?"
+      )
+    ) {
+      if (!isEdit) {
+        onCreate(date, content, emotion);
+      } else {
+        onEdit(originData.id, date, content, emotion);
+      }
+    }
+
     navigate("/", { replace: true }); // 작성 완료되면 home 화면으로 돌아오는데, 뒤로가기를 통해서 일기 작성 페이지로 못 돌아오도록 replace: true 옵션을 준다.
   };
+
+  // Edit 페이지에서 랜더하는 경우만 로직 실행
+  useEffect(() => {
+    // isEdit가 true일 때만 실행
+    if (isEdit) {
+      // 원래 data로 넣어주기
+      setDate(getStringDate(new Date(parseInt(originData.date))));
+      setEmotion(originData.emotion);
+      setContent(originData.content);
+    }
+  }, [isEdit, originData]);
 
   return (
     <div className="DiaryEditor">
       <MyHeader
-        headText={"새 일기 쓰기"}
+        headText={isEdit ? "일기 수정하기" : "새 일기 쓰기"} // 페이지에 따라서..
         leftChild={
           <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
         }
