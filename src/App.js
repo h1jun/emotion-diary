@@ -18,11 +18,11 @@ const reducer = (state, action) => {
       break;
     }
     case "REMOVE": {
-      newState = state.filter((it) => it.id !== action.targeId);
+      newState = state.filter((it) => it.id !== action.targetId);
       break;
     }
     case "EDIT": {
-      newState = state.filter((it) =>
+      newState = state.map((it) =>
         it.id === action.data.id ? { ...action.data } : it
       );
       break;
@@ -31,6 +31,7 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+  return newState;
 };
 
 export const DiaryStateContext = React.createContext();
@@ -79,7 +80,7 @@ function App() {
       type: "CREATE",
       data: {
         id: dataId.current,
-        data: new Date(date).getTime(),
+        date: new Date(date).getTime(),
         content,
         emotion,
       },
@@ -88,15 +89,15 @@ function App() {
   };
 
   // REMOVE
-  const onRemove = (targeId) => {
-    dispatch({ type: "REMOVE", targeId });
+  const onRemove = (targetId) => {
+    dispatch({ type: "REMOVE", targetId });
   };
 
   // EDIT
-  const onEdit = (targeId, date, content, emotion) => {
+  const onEdit = (targetId, date, content, emotion) => {
     dispatch({
       type: "Edit",
-      id: targeId,
+      id: targetId,
       data: new Date(date).getTime(),
       content,
       emotion,
@@ -105,7 +106,7 @@ function App() {
 
   return (
     <DiaryStateContext.Provider value={data}>
-      <DiaryDispatchContext.Provider value={(onCreate, onEdit, onRemove)}>
+      <DiaryDispatchContext.Provider value={{ onCreate, onEdit, onRemove }}>
         <BrowserRouter>
           <div className="App">
             <Routes>
