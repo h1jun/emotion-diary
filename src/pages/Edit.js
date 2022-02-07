@@ -21,6 +21,7 @@ export const Edit = () => {
       if (targetDiary) {
         setOriginData(targetDiary);
       } else {
+        alert("없는 일기 입니다.");
         navigate("/", { replace: true });
       }
     }
