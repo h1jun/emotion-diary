@@ -9,7 +9,11 @@ export const Edit = () => {
   const { id } = useParams();
 
   const diaryList = useContext(DiaryStateContext);
-  console.log(diaryList);
+
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `감정 일기장 - ${id}번 일기 수정 `;
+  }, []);
 
   useEffect(() => {
     // 일기 데이터가 1나라도 있을 때 데이터 꺼내기

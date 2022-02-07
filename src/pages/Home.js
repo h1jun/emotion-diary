@@ -13,6 +13,11 @@ export const Home = () => {
   const [curDate, setCurDate] = useState(new Date());
   const headText = `${curDate.getFullYear()}년 ${curDate.getMonth() + 1}월`;
 
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `감정 일기장`;
+  }, []);
+
   // 달이 바뀔 때마다 작동 되도록
   useEffect(() => {
     if (diaryList.length >= 1) {

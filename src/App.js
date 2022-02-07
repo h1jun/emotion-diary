@@ -47,7 +47,11 @@ function App() {
       const diaryList = JSON.parse(localData).sort(
         (a, b) => parseInt(b.id) - parseInt(a.id)
       );
-      dataId.current = +diaryList[0].id + 1;
+
+      // 로컬스토리지에 값이 있을 때만 수행
+      if (diaryList.lenght > 0) {
+        dataId.current = +diaryList[0].id + 1;
+      }
 
       dispatch({ type: "INIT", data: diaryList });
     }
