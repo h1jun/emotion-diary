@@ -1,5 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { DiaryDispatchContext } from "./../App";
 import { MyButton } from "./MyButton";
 import { MyHeader } from "./MyHeader";
@@ -13,11 +19,13 @@ export const DiaryEditor = ({ isEdit, originData }) => {
   const [content, setContent] = useState("");
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
-  const { onCreate, onEdit } = useContext(DiaryDispatchContext);
+  const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
   const navigate = useNavigate();
-  const handleClickEmote = (emotion) => {
+
+  //emotion을 받아서 setEmotion을 하기 때문에 최신의 state를 참조할 필요가 없기 때문에 함수형 업데이트를 할 필요가 없다.
+  const handleClickEmote = useCallback((emotion) => {
     setEmotion(emotion);
-  };
+  }, []);
 
   const handleSubmit = () => {
     if (content.length < 1) {
@@ -41,6 +49,13 @@ export const DiaryEditor = ({ isEdit, originData }) => {
     navigate("/", { replace: true }); // 작성 완료되면 home 화면으로 돌아오는데, 뒤로가기를 통해서 일기 작성 페이지로 못 돌아오도록 replace: true 옵션을 준다.
   };
 
+  const handleRemove = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      onRemove(originData.id);
+      navigate("/", { replace: true });
+    }
+  };
+
   // Edit 페이지에서 랜더하는 경우만 로직 실행
   useEffect(() => {
     // isEdit가 true일 때만 실행
@@ -58,6 +73,15 @@ export const DiaryEditor = ({ isEdit, originData }) => {
         headText={isEdit ? "일기 수정하기" : "새 일기 쓰기"} // 페이지에 따라서..
         leftChild={
           <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
+        }
+        rightChild={
+          isEdit && (
+            <MyButton
+              text={"삭제하기"}
+              type={"negative"}
+              onClick={handleRemove}
+            />
+          )
         }
       />
       <div>

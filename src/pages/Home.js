@@ -39,10 +39,6 @@ export const Home = () => {
   // 왜 diaryList가 바뀔때 동작해야  하는가?
   // diaryList가 바뀌었다는 것은 일기가 새롭게 추가 수정 삭제 변경되었다는 것을 의미한다. 그리새 list를 다시 변경해줘야 되기 때문에!
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const increaseMonth = () => {
     setCurDate(
       new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate())

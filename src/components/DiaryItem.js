@@ -2,7 +2,7 @@ import React from "react";
 import { MyButton } from "./MyButton";
 import { useNavigate } from "react-router-dom";
 
-export const DiaryItem = ({ id, emotion, content, date }) => {
+export const DiaryItem = React.memo(({ id, emotion, content, date }) => {
   const navigate = useNavigate();
   const env = process.env;
   env.PUBLIC_URL = env.PUBLIC_URL || "";
@@ -40,4 +40,4 @@ export const DiaryItem = ({ id, emotion, content, date }) => {
       </div>
     </div>
   );
-};
+});
